@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pasta Cook-Off — Results 🏆</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #fff;
+      --surface: #f7c5d8;
+      --card: #f7c5d8;
+      --accent: #ff3334;
+      --gold: #ff3334;
+      --cream: #FFF;
+      --muted: #7A6A5A;
+      --border: rgba(212, 90, 42, 0.25);
+      --radius: 14px;
+      --silver: #B8B8C0;
+      --bronze: #CD7F32;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 700px 500px at 20% 10%, rgba(212, 90, 42, 0.07) 0%, transparent 100%),
+        radial-gradient(ellipse 500px 400px at 80% 90%, rgba(237, 184, 74, 0.05) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    /* HEADER */
+    .site-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .site-title h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 30px;
+      color: var(--gold);
+    }
+
+    .site-title p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .refresh-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .refresh-btn:hover {
+      border-color: var(--accent);
+      color: var(--cream);
+    }
+
+    .refresh-icon {
+      display: inline-block;
+      transition: transform 0.6s ease;
+      font-style: normal;
+    }
+
+    .refresh-btn:hover .refresh-icon {
+      transform: rotate(180deg);
+    }
+
+    /* STATUS CHIPS */
+    .stat-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .stat-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+    }
+
+    .stat-chip strong {
+      color: var(--gold);
+    }
+
+    /* STATE CARDS */
+    .state-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 64px 40px;
+      text-align: center;
+    }
+
+    .state-card .icon {
+      font-size: 52px;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .state-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .state-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .spinning {
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* WINNER BANNER */
+    .winner-banner {
+      background: linear-gradient(135deg, #c2952d 0%, #f9f1b9 44%, #c2952d 100%);
+      border: 1.5px solid rgba(237, 184, 74, 0.6);
+      border-radius: 18px;
+      padding: 28px 32px;
+      text-align: center;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .winner-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(237, 184, 74, 0.08) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .winner-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(237, 184, 74, 0.6);
+      margin-bottom: 6px;
+    }
+
+    .winner-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 38px;
+      color: var(--gold);
+      margin-bottom: 8px;
+      line-height: 1.1;
+    }
+
+    .winner-score {
+      font-size: 28px;
+      font-weight: 700;
+      color: #000;
+      font-family: 'Playfair Display', serif;
+      line-height: 1;
+    }
+
+    .winner-meta {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .winner-meta strong {
+      color: #000;
+    }
+
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    /* TEAM CARDS */
+    .team-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .team-card:hover {
+      border-color: rgba(212, 90, 42, 0.4);
+    }
+
+    .team-card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .rank-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      flex-shrink: 0;
+      font-weight: 700;
+      color: var(--muted);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .rank-1 {
+      border-color: var(--gold);
+      background: rgba(237, 184, 74, 0.1);
+    }
+
+    .rank-2 {
+      border-color: var(--silver);
+      background: rgba(184, 184, 192, 0.07);
+    }
+
+    .rank-3 {
+      border-color: var(--bronze);
+      background: rgba(205, 127, 50, 0.08);
+    }
+
+    .team-card-name {
+      flex: 1;
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .team-card-score {
+      text-align: right;
+    }
+
+    .score-total {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      line-height: 1;
+    }
+
+    .score-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* BREAKDOWN */
+    .breakdown {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .team-card.open .breakdown {
+      display: flex;
+    }
+
+    .crit-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .crit-name {
+      font-size: 12px;
+      color: var(--muted);
+      flex-shrink: 0;
+      width: 148px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .crit-track {
+      flex: 1;
+      height: 6px;
+      background: var(--surface);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .crit-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      border-radius: 3px;
+      transition: width 0.7s ease;
+    }
+
+    .crit-val {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--cream);
+      width: 26px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .sub-count {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    /* EXPAND TOGGLE */
+    .expand-toggle {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-top: 1px solid var(--border);
+      margin-top: 16px;
+      padding-top: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+      transition: color 0.2s;
+    }
+
+    .expand-toggle:hover {
+      color: var(--cream);
+    }
+
+    /* FOOTER */
+    .last-updated {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 36px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 480px) {
+      .crit-name {
+        width: 110px;
+      }
+
+      .winner-name {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="site-header">
+      <div class="site-title">
+        <h1>🍝 Results</h1>
+        <p>Pasta Cook-Off Leaderboard</p>
+      </div>
+      <button class="refresh-btn" onclick="loadResults()">
+        <i class="refresh-icon">↻</i> Refresh
+      </button>
+    </div>
+
+    <div id="stat-bar" class="stat-bar" style="display:none;"></div>
+    <div id="content"></div>
+    <div id="last-updated" class="last-updated"></div>
+
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════
+    // ⚙️  CONFIG
+    // ═══════════════════════════════════════════════
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLuY_2M0LF7QAYLWK4mlV8F0xnFKy4vKRcpACOmm4JCo-guT6YjC6rgbSK7YI5SjqF/exec';
+
+    const CRITERIA = [
+      'Overall Taste',
+      'Pasta Sauce Harmony',
+      'Creativity / Originality',
+      'Tidiness',
+      'Presentation',
+      'Team Spirit',
+      'Pasta Making Technique'
+    ];
+
+    const MEDALS = ['🥇', '🥈', '🥉'];
+
+    // ═══════════════════════════════════════════════
+    // Load results
+    // ═══════════════════════════════════════════════
+    async function loadResults() {
+      const content = document.getElementById('content');
+      const statBar = document.getElementById('stat-bar');
+      statBar.style.display = 'none';
+
+      content.innerHTML = `
+    <div class="state-card">
+      <span class="icon spinning">🍝</span>
+      <h2>Tallying Scores…</h2>
+      <p>Fetching the latest results from the judges.</p>
+    </div>`;
+
+      try {
+        const res = await fetch(`${APPS_SCRIPT_URL}?action=getResults`);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        renderResults(data);
+        const now = new Date().toLocaleTimeString('en-NZ', { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('last-updated').textContent = 'Last refreshed: ' + now;
+      } catch (e) {
+        console.error(e);
+        content.innerHTML = `
+      <div class="state-card">
+        <span class="icon">😬</span>
+        <h2>Couldn't Load Results</h2>
+        <p>Check that the Apps Script URL is correct, then try refreshing.</p>
+      </div>`;
+      }
+    }
+
+    // ═══════════════════════════════════════════════
+    // Render leaderboard
+    // ═══════════════════════════════════════════════
+    function renderResults(data) {
+      const content = document.getElementById('content');
+      const statBar = document.getElementById('stat-bar');
+      const teams = data.teams || [];
+
+      if (teams.length === 0) {
+        content.innerHTML = `
+      <div class="state-card">
+        <span class="icon">👀</span>
+        <h2>No Scores Yet</h2>
+        <p>Judges are still scoring. Hit refresh once submissions start coming in.</p>
+      </div>`;
+        return;
+      }
+
+      // Stats bar
+      const totalSubs = teams.reduce((a, t) => a + t.submissionCount, 0);
+      statBar.innerHTML = `
+    <div class="stat-chip"><strong>${teams.length}</strong> teams competing</div>
+    <div class="stat-chip"><strong>${totalSubs}</strong> judge submission${totalSubs !== 1 ? 's' : ''}</div>
+  `;
+      statBar.style.display = 'flex';
+
+      let html = '';
+
+      // Winner banner
+      const winner = teams[0];
+      html += `
+    <div class="winner-banner">
+      <div class="winner-eyebrow">🏆 Current Leader</div>
+      <div class="winner-name">${winner.name}</div>
+      <div class="winner-meta">
+        <strong class="winner-score">${winner.totalAverage.toFixed(2)}</strong> avg total score
+        &nbsp;·&nbsp; ${winner.submissionCount} rating${winner.submissionCount !== 1 ? 's' : ''}
+      </div>
+    </div>`;
+
+      html += '<div class="section-label">Full Leaderboard</div>';
+
+      teams.forEach((team, i) => {
+        const rank = i + 1;
+        const rankClass = rank <= 3 ? 'rank-' + rank : '';
+        const medal = MEDALS[i] !== undefined ? MEDALS[i] : rank;
+
+        const criteriaRows = CRITERIA.map((crit, ci) => {
+          const avg = (team.criteriaAverages && team.criteriaAverages[ci]) || 0;
+          const pct = (avg / 10) * 100;
+          return `
+        <div class="crit-row">
+          <div class="crit-name">${crit}</div>
+          <div class="crit-track">
+            <div class="crit-fill" style="width:${pct.toFixed(1)}%"></div>
+          </div>
+          <div class="crit-val">${avg.toFixed(1)}</div>
+        </div>`;
+        }).join('');
+
+        html += `
+      <div class="team-card" id="tc-${i}">
+        <div class="team-card-top">
+          <div class="rank-badge ${rankClass}">${medal}</div>
+          <div class="team-card-name">${team.name}</div>
+          <div class="team-card-score">
+            <div class="score-total">${team.totalAverage.toFixed(1)}</div>
+            <div class="score-label">avg total</div>
+          </div>
+        </div>
+        <div class="breakdown">
+          ${criteriaRows}
+          <div class="sub-count">${team.submissionCount} rating${team.submissionCount !== 1 ? 's' : ''} submitted</div>
+        </div>
+        <button class="expand-toggle" onclick="toggleCard(${i})">▾ Show breakdown</button>
+      </div>`;
+      });
+
+      content.innerHTML = html;
+    }
+
+    function toggleCard(i) {
+      const card = document.getElementById('tc-' + i);
+      const btn = card.querySelector('.expand-toggle');
+      const open = card.classList.toggle('open');
+      btn.textContent = open ? '▴ Hide breakdown' : '▾ Show breakdown';
+    }
+
+    // ═══════════════════════════════════════════════
+    // Init
+    // ═══════════════════════════════════════════════
+    loadResults();
+  </script>
+</body>
+
+</html>
